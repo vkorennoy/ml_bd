@@ -1,0 +1,135 @@
+1.
+vkorennoy@DESKTOP-CT96931:~$ docker cp meow_meow.txt namenode:/
+vkorennoy@DESKTOP-CT96931:~$ docker exec -it namenode /bin/bash
+root@a1eb4484cb50:/# hdfs dfs -put meow_meow.txt /
+2021-10-10 11:31:10,165 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+root@a1eb4484cb50:/# hdfs dfs -cp /meow_meow.txt /HW1
+2021-10-10 11:40:31,820 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+2021-10-10 11:40:32,373 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+
+
+2.
+root@a1eb4484cb50:/# hdfs dfs -cat /HW1/meow_meow.txt
+2021-10-10 11:36:45,857 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+The three little kittens, they lost their mittens,
+And they began to cry,
+"Oh, mother dear, we sadly fear,
+That we have lost our mittens."
+"What!   Lost your mittens, you naughty kittens!
+Then you shall have no pie."
+"Meow, meow, meow."
+"Then you shall have no pie."
+
+The three little kittens, they found their mittens,
+And they began to cry,
+"Oh, mother dear, see here, see here,
+For we have found our mittens."
+"Put on your mittens, you silly kittens,
+And you shall have some pie."
+"Purr, purr, purr,
+Oh, let us have some pie."
+
+The three little kittens put on their mittens,
+And soon ate up the pie,
+"Oh, mother dear, we greatly fear,
+That we have soiled our mittens."
+"What, soiled your mittens, you naughty kittens!"
+Then they began to sigh,
+"Meow, meow, meow,"
+Then they began to sigh.
+
+The three little kittens, they washed their mittens,
+And hung them out to dry,
+"Oh, mother dear, do you not hear,
+That we have washed our mittens?"
+"What, washed your mittens, then you're good kittens,
+But I smell a rat close by."
+"Meow, meow, meow,
+We smell a rat close by."
+
+
+3.
+root@a1eb4484cb50:/# hdfs dfs -tail /HW1/meow_meow.txt
+2021-10-10 11:37:02,293 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+ mother dear, we sadly fear,
+That we have lost our mittens."
+"What!   Lost your mittens, you naughty kittens!
+Then you shall have no pie."
+"Meow, meow, meow."
+"Then you shall have no pie."
+
+The three little kittens, they found their mittens,
+And they began to cry,
+"Oh, mother dear, see here, see here,
+For we have found our mittens."
+"Put on your mittens, you silly kittens,
+And you shall have some pie."
+"Purr, purr, purr,
+Oh, let us have some pie."
+
+The three little kittens put on their mittens,
+And soon ate up the pie,
+"Oh, mother dear, we greatly fear,
+That we have soiled our mittens."
+"What, soiled your mittens, you naughty kittens!"
+Then they began to sigh,
+"Meow, meow, meow,"
+Then they began to sigh.
+
+The three little kittens, they washed their mittens,
+And hung them out to dry,
+"Oh, mother dear, do you not hear,
+That we have washed our mittens?"
+"What, washed your mittens, then you're good kittens,
+But I smell a rat close by."
+"Meow, meow, meow,
+We smell a rat close by."
+
+
+4.
+root@a1eb4484cb50:/# hdfs dfs -head /HW1/meow_meow.txt
+2021-10-10 11:39:04,196 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+The three little kittens, they lost their mittens,
+And they began to cry,
+"Oh, mother dear, we sadly fear,
+That we have lost our mittens."
+"What!   Lost your mittens, you naughty kittens!
+Then you shall have no pie."
+"Meow, meow, meow."
+"Then you shall have no pie."
+
+The three little kittens, they found their mittens,
+And they began to cry,
+"Oh, mother dear, see here, see here,
+For we have found our mittens."
+"Put on your mittens, you silly kittens,
+And you shall have some pie."
+"Purr, purr, purr,
+Oh, let us have some pie."
+
+The three little kittens put on their mittens,
+And soon ate up the pie,
+"Oh, mother dear, we greatly fear,
+That we have soiled our mittens."
+"What, soiled your mittens, you naughty kittens!"
+Then they began to sigh,
+"Meow, meow, meow,"
+Then they began to sigh.
+
+The three little kittens, they washed their mittens,
+And hung them out to dry,
+"Oh, mother dear, do you not hear,
+That we have washed our mittens?"
+"What, washed your mittens, then you're good kittens
+
+
+5.
+root@a1eb4484cb50:/# hdfs dfs -mv /HW1/meow_meow.txt /HW1/test
+
+root@a1eb4484cb50:/# hdfs dfs -ls /HW1/test
+Found 1 items
+-rw-r--r--   3 root supergroup       1104 2021-10-10 11:40 /HW1/test/meow_meow.txt
+
+root@a1eb4484cb50:/# hdfs dfs -ls /HW1
+Found 1 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 11:41 /HW1/test

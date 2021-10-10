@@ -1,0 +1,40 @@
+Логи исполнения команд можно посмотреть в файле Блок 3_логи.txt
+
+Команды:
+1. Устанавливаем питон на нодменеджерах
+vkorennoy@DESKTOP-CT96931:~$ docker exec -it nodemanager1 /bin/bash
+root@15a71eed3779:/# apt update && apt upgrade && apt-get install python3
+
+vkorennoy@DESKTOP-CT96931:~$ docker exec -it nodemanager2 /bin/bash
+root@15a71eed3779:/# apt update && apt upgrade && apt-get install python3
+
+vkorennoy@DESKTOP-CT96931:~$ docker exec -it nodemanager3 /bin/bash
+root@15a71eed3779:/# apt update && apt upgrade && apt-get install python3
+
+2. Прокидываем нужные файлы в HDFS (mapper, reducer и преобработанный датасет)
+vkorennoy@DESKTOP-CT96931:~$ docker cp reducer.py namenode:/
+vkorennoy@DESKTOP-CT96931:~$ docker cp mapper.py namenode:/
+vkorennoy@DESKTOP-CT96931:~$ docker cp prices.csv namenode:/
+vkorennoy@DESKTOP-CT96931:~$ docker exec -it namenode /bin/bash
+root@a1eb4484cb50:/# hdfs dfs -put mapper.py /
+root@a1eb4484cb50:/# hdfs dfs -put reducer.py /
+root@a1eb4484cb50:/# hdfs dfs -put prices.csv /
+
+3. Даем разрешения на исполнение py файлов
+root@a1eb4484cb50:/# chmod +x /reducer.py
+root@a1eb4484cb50:/# chmod +x /mapper.py
+
+4. Проверяем работу скриптов
+root@a1eb4484cb50:/#  hdfs dfs -cat  /prices.csv | python3 mapper.py | python3 reducer.py
+2021-10-10 17:47:26,594 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+152.75505277800508 57680.573868791325
+
+5. Запускаем скрипт распределенного вычисления дисперсии
+root@a1eb4484cb50:/# mapred streaming -files mapper.py,reducer.py,prices.csv -mapper "python3 mapper.py" -reducer "python3 reducer.py" -input /prices.csv -output output
+
+6. Выводим результаты расчета на экран
+root@a1eb4484cb50:/#  hdfs dfs -cat /user/root/output/part-00000
+2021-10-10 17:52:13,310 INFO sasl.SaslDataTransferClient: SASL encryption trust check: localHostTrusted = false, remoteHostTrusted = false
+152.75505277800508 57680.57386879087
+
+Как видим, ответы совпадают с вычисленным через numpy (ноутбук "расчет среднего и дисперсии")

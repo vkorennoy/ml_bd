@@ -1,0 +1,36 @@
+1.
+root@a1eb4484cb50:/# hdfs dfs -mkdir /HW1
+root@a1eb4484cb50:/# hdfs dfs -ls /
+Found 2 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 10:31 /HW1
+drwxr-xr-x   - root supergroup          0 2021-10-10 10:03 /rmstate
+
+
+2.
+root@a1eb4484cb50:/# hdfs dfs -mkdir /HW1/test
+root@a1eb4484cb50:/# hdfs dfs -ls /HW1
+Found 1 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 10:31 /HW1/test
+
+
+3. Trash - это временное хранилище удаленных файлов (аналог корзины на локальном компьютере). Чтобы файлы удалялись, минуя Trash, надо добавлять флаг -skipTrash
+
+
+4.
+root@a1eb4484cb50:/# hdfs dfs -touchz /HW1/test/hello_world
+root@a1eb4484cb50:/# hdfs dfs -ls /HW1/test
+Found 1 items
+-rw-r--r--   3 root supergroup          0 2021-10-10 10:34 /HW1/test/hello_world
+
+
+5.
+root@a1eb4484cb50:/# hdfs dfs -rm -skipTrash /HW1/test/hello_world
+Deleted /HW1/test/hello_world
+
+
+6.
+root@a1eb4484cb50:/# hdfs dfs -rmdir /HW1/test
+root@a1eb4484cb50:/# hdfs dfs -rmdir /HW1
+root@a1eb4484cb50:/# hdfs dfs -ls /
+Found 1 items
+drwxr-xr-x   - root supergroup          0 2021-10-10 10:03 /rmstate

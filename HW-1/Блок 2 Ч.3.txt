@@ -1,0 +1,84 @@
+1.
+root@a1eb4484cb50:/# time hdfs dfs -setrep -w 2 /HW1/test/meow_meow.txt
+Replication 2 set: /HW1/test/meow_meow.txt
+Waiting for /HW1/test/meow_meow.txt ...
+WARNING: the waiting time may be long for DECREASING the number of replications.
+. done
+
+real    0m41.624s
+user    0m42.884s
+sys     0m3.495s
+
+
+root@a1eb4484cb50:/# time hdfs dfs -setrep -w 3 /HW1/test/meow_meow.txt
+Replication 3 set: /HW1/test/meow_meow.txt
+Waiting for /HW1/test/meow_meow.txt .... done
+
+real    0m51.585s
+user    0m38.251s
+sys     0m3.865s
+
+
+2.
+root@a1eb4484cb50:/# hdfs fsck /HW1/test/meow_meow.txt -files -blocks -locations
+Connecting to namenode via http://namenode:9870/fsck?ugi=root&files=1&blocks=1&locations=1&path=%2FHW1%2Ftest%2Fmeow_meow.txt
+FSCK started by root (auth:SIMPLE) from /172.19.0.4 for path /HW1/test/meow_meow.txt at Sun Oct 10 12:29:15 UTC 2021
+/HW1/test/meow_meow.txt 1104 bytes, replicated: replication=3, 1 block(s):  OK
+0. BP-1267781418-172.18.0.8-1633858782056:blk_1073741835_1011 len=1104 Live_repl=3  [DatanodeInfoWithStorage[172.19.0.6:9866,DS-83755b8e-1971-4d07-b7cb-11607e7ce53c,DISK], DatanodeInfoWithStorage[172.19.0.9:9866,DS-0cf42272-1c00-4739-91d4-0f3d01673949,DISK], DatanodeInfoWithStorage[172.19.0.7:9866,DS-a4fd7895-ede7-4e6e-9c86-096e6c55a767,DISK]]
+
+
+Status: HEALTHY
+ Number of data-nodes:  3
+ Number of racks:               1
+ Total dirs:                    0
+ Total symlinks:                0
+
+Replicated Blocks:
+ Total size:    1104 B
+ Total files:   1
+ Total blocks (validated):      1 (avg. block size 1104 B)
+ Minimally replicated blocks:   1 (100.0 %)
+ Over-replicated blocks:        0 (0.0 %)
+ Under-replicated blocks:       0 (0.0 %)
+ Mis-replicated blocks:         0 (0.0 %)
+ Default replication factor:    3
+ Average block replication:     3.0
+ Missing blocks:                0
+ Corrupt blocks:                0
+ Missing replicas:              0 (0.0 %)
+
+Erasure Coded Block Groups:
+ Total size:    0 B
+ Total files:   0
+ Total block groups (validated):        0
+ Minimally erasure-coded block groups:  0
+ Over-erasure-coded block groups:       0
+ Under-erasure-coded block groups:      0
+ Unsatisfactory placement block groups: 0
+ Average block group size:      0.0
+ Missing block groups:          0
+ Corrupt block groups:          0
+ Missing internal blocks:       0
+FSCK ended at Sun Oct 10 12:29:15 UTC 2021 in 1 milliseconds
+
+
+The filesystem under path '/HW1/test/meow_meow.txt' is HEALTHY
+
+
+3.
+root@a1eb4484cb50:/# hdfs fsck -blockId blk_1073741835_1011.meta
+Connecting to namenode via http://namenode:9870/fsck?ugi=root&blockId=blk_1073741835_1011.meta+&path=%2F
+FSCK started by root (auth:SIMPLE) from /172.19.0.4 at Sun Oct 10 14:19:07 UTC 2021
+
+Block Id: blk_1073741835_1011.meta
+Block belongs to: /HW1/test/meow_meow.txt
+No. of Expected Replica: 3
+No. of live Replica: 3
+No. of excess Replica: 0
+No. of stale Replica: 0
+No. of decommissioned Replica: 0
+No. of decommissioning Replica: 0
+No. of corrupted Replica: 0
+Block replica on datanode/rack: 9af42e0009e5/default-rack is HEALTHY
+Block replica on datanode/rack: dcefd487bf27/default-rack is HEALTHY
+Block replica on datanode/rack: 630f4ca86fd2/default-rack is HEALTHY
