@@ -1,0 +1,51 @@
+a.
+SELECT artist_mb, sum(scrobbles_lastfm) as s
+FROM hue__tmp_artists
+GROUP BY artist_mb, scrobbles_lastfm
+ORDER BY s DESC
+LIMIT 1
+
+b.
+SELECT tbl.tags, sum(listeners_lastfm) as s
+FROM hue__tmp_artists
+LATERAL VIEW EXPLODE(split(tags_lastfm, '; ')) tbl as tags
+GROUP BY tbl.tags
+ORDER BY s DESC
+LIMIT 1
+
+c.
+SELECT DISTINCT pop_artists.artist_mb, pop_artists.listeners_lastfm FROM
+(SELECT artist_mb, tbl.tags, listeners_lastfm
+FROM hue__tmp_artists
+LATERAL VIEW EXPLODE(split(tags_lastfm, '; ')) tbl as tags) pop_artists
+WHERE pop_artists.tags in
+(SELECT pop_tags.tags FROM
+(SELECT tbl.tags, sum(listeners_lastfm) as s
+FROM hue__tmp_artists
+LATERAL VIEW EXPLODE(split(tags_lastfm, '; ')) tbl as tags
+GROUP BY tbl.tags
+ORDER BY s DESC
+LIMIT 10) pop_tags)
+ORDER BY pop_artists.listeners_lastfm DESC
+LIMIT 10
+
+d.
+10 стран, исполнители из которых наиболее популярны по 10 наиболее популярным тегам ластфм
+
+SELECT pop_countries.country_lastfm, sum(pop_countries.listeners_lastfm) as ss from
+(SELECT DISTINCT pop_artists.artist_mb, pop_artists.listeners_lastfm, pop_artists.country_lastfm FROM
+(SELECT artist_mb, tbl.tags, listeners_lastfm, country_lastfm
+FROM hue__tmp_artists
+LATERAL VIEW EXPLODE(split(tags_lastfm, '; ')) tbl as tags) pop_artists
+WHERE pop_artists.tags in
+(SELECT pop_tags.tags FROM
+(SELECT tbl.tags, sum(listeners_lastfm) as s
+FROM hue__tmp_artists
+LATERAL VIEW EXPLODE(split(tags_lastfm, '; ')) tbl as tags
+GROUP BY tbl.tags
+ORDER BY s DESC
+LIMIT 10) pop_tags)) pop_countries
+WHERE pop_countries.country_lastfm != ""
+GROUP BY pop_countries.country_lastfm
+ORDER BY ss DESC
+LIMIT 10
